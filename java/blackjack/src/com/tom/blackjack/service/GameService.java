@@ -5,7 +5,7 @@ import com.tom.blackjack.model.Game;
 /**
  * Created by duerrt on 5/30/16.
  */
-public interface BlackJackService {
+public interface GameService {
 
     public Game create(int numberOfPlayers);
 

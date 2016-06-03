@@ -9,13 +9,19 @@ import java.util.Map;
  */
 public class Card {
 
+    String suit = null;
+
+    int value;
+
+    String label;
+
+    public static Map<Integer, String> cardLabels  = initCardLabels();
+
+    public static Map<String, Integer> cardValues  = initCardValues();
+
     public enum Suits {
      clubs, diamonds, hearts, spades
     }
-
-    public static Map<Integer, String> cardLabels  = initCardLabels();
-    public static Map<String, Integer> cardValues  = initCardValues();
-
 
     public Card(String suit, int index, String  label){
       this.suit = suit;
@@ -24,17 +30,11 @@ public class Card {
 
     }
 
-    String suit = null;
-
-    int value;
-
-    String label;
 
     @Override
     public String toString() {
         return (this.label + " of " + this.suit);
     }
-
 
     protected static Map<Integer, String> initCardLabels() {
         final Map<Integer, String> cardMap = new HashMap<>();
@@ -73,28 +73,15 @@ public class Card {
 
         return Collections.unmodifiableMap(cardMap);
     }
-    public String getSuit() {
-        return suit;
-    }
 
-    public void setSuit(String suit) {
-        this.suit = suit;
-    }
-
-    public int getValue() {
+    public int getValue()
+    {
         return value;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public String getLabel() {
+    public String getLabel()
+    {
         return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
 }

@@ -10,27 +10,23 @@ public class Deck {
 
     List<Card> cards = new ArrayList();
 
-    public Deck shuffle(){
-     init();
-     return this;
-    }
 
-    private void init(){
-
+    public Deck (){
         for (Card.Suits suit : Card.Suits.values()) {
             for (int i=1; i<14; i++){
                 Card c = null;
-                    c = new Card(suit.toString(), Card.cardValues.get(Card.cardLabels.get(i)), Card.cardLabels.get(i) );
-                    cards.add(c);
+                c = new Card(suit.toString(), Card.cardValues.get(Card.cardLabels.get(i)), Card.cardLabels.get(i) );
+                cards.add(c);
             }
         }
+
+        shuffle(14);
     }
-
-
 
     public  List<Card> getCards(){
         return cards;
     }
+
     public  void dumpCards(){
         for (Card c : cards) {
             System.out.println(c);
@@ -41,6 +37,7 @@ public class Deck {
         int index = (int)(Math.random()*cards.size() );
         Card c = cards.get(index);
         cards.remove(index);
+        System.out.println(" card dealt "+c.getValue());
         return c;
     }
 
@@ -55,5 +52,4 @@ public class Deck {
        }
 
     }
-
 }
