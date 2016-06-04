@@ -1,0 +1,15 @@
+/.gradle
+/.metadata
+/output
+
+# Exclusions that apply to all projects
+*~
+*/bin
+*/build
+*/classes
+*/target
+*/.classpath
+*/context/WEB-INF/classes
+*/context/WEB-INF/lib
+.settings
+/.idea/
