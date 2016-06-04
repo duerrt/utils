@@ -1,16 +1,23 @@
-package com.tdsystemsgroup.blackjack.model;
+package com.tdsystemsgroup.blackjack.server.model;
+
+import com.tdsystemsgroup.blackjack.common.model.Card;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Deck class to simulate a deck of cards
+ *
  * Created by duerrt on 8/17/15.
  */
 public class Deck {
 
     List<Card> cards = new ArrayList();
 
-
+    /**
+     * Deck constuctor
+     * create the cards and shuffle
+     */
     public Deck (){
         for (Card.Suits suit : Card.Suits.values()) {
             for (int i=1; i<14; i++){
@@ -19,12 +26,7 @@ public class Deck {
                 cards.add(c);
             }
         }
-
-        shuffle(15);
-    }
-
-    public  List<Card> getCards(){
-        return cards;
+        shuffle();
     }
 
     public  void dumpCards(){
@@ -33,6 +35,10 @@ public class Deck {
         }
     }
 
+    /**
+     * dealt a card
+     * @return the card dealt
+     */
     public Card deal(){
         int index = (int)(Math.random()*cards.size() );
         Card c = cards.get(index);
@@ -41,14 +47,15 @@ public class Deck {
         return c;
     }
 
-    public void shuffle(int cnt){
-        for ( int i=0; i<cnt ; i++) {
-            int n = (int)(Math.random()*cards.size() );
-            int k = (int)(Math.random()*cards.size() );
-            Card tmp = cards.get(n);
-
-            cards.set(n,cards.get(k));
-            cards.set(k, tmp);
+    /**
+     * shuffle the cards
+     */
+    public void shuffle(){
+        for ( int i=0; i<cards.size() ; i++) {
+            Card tmp = cards.get(i);
+            int j = ( int ) ( Math.random( ) * 52 );
+            cards.set(i, cards.get(j));
+            cards.set(j, tmp);
        }
 
     }

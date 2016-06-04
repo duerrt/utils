@@ -1,4 +1,6 @@
-package com.tdsystemsgroup.blackjack.model;
+package com.tdsystemsgroup.blackjack.server.model;
+
+import com.tdsystemsgroup.blackjack.common.model.Card;
 
 import java.util.ArrayList;
 
@@ -7,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Game {
 
-    private ArrayList<Player> players;
+    private ArrayList<Card.Player> players;
 
     private Deck deck = null;
 
@@ -17,12 +19,12 @@ public class Game {
 
     }
 
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<Card.Player> getPlayers() {
 
         return players;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
+    public void setPlayers(ArrayList<Card.Player> players) {
         this.players = players;
     }
 
@@ -42,8 +44,8 @@ public class Game {
         this.id = id;
     }
 
-    public Player getDealer() {
-        for (Player player : players) {
+    public Card.Player getDealer() {
+        for (Card.Player player : players) {
             if (player.isDealer()){
                 return player;
             }
