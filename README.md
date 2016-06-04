@@ -3,7 +3,7 @@ Place to store utility scripts
 
 Use git clone to checkout.
 
-For BlackJack
+#For BlackJack
 
 Clone first.
 
@@ -15,7 +15,7 @@ run gradle to build
 
 ./gradlew fatjar
 
-run blackjacl
+run blackjack
 
 java -jar build/libs/blackjack-all-1.0.jar
 
