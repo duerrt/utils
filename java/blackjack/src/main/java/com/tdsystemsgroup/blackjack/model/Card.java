@@ -1,4 +1,4 @@
-package com.tom.blackjack.model;
+package com.tdsystemsgroup.blackjack.model;
 
 import java.util.Collections;
 import java.util.HashMap;

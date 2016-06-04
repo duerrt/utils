@@ -1,9 +1,9 @@
-package com.tom.blackjack.service;
+package com.tdsystemsgroup.blackjack.service;
 
-import com.tom.blackjack.model.Card;
-import com.tom.blackjack.model.Deck;
-import com.tom.blackjack.model.Game;
-import com.tom.blackjack.model.Player;
+import com.tdsystemsgroup.blackjack.model.Card;
+import com.tdsystemsgroup.blackjack.model.Deck;
+import com.tdsystemsgroup.blackjack.model.Game;
+import com.tdsystemsgroup.blackjack.model.Player;
 
 import java.util.*;
 

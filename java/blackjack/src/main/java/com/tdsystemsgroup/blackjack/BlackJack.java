@@ -1,15 +1,12 @@
-package com.tom.blackjack;
+package com.tdsystemsgroup.blackjack;
 
-import com.tom.blackjack.model.Card;
-import com.tom.blackjack.model.Deck;
-import com.tom.blackjack.model.Player;
-import com.tom.blackjack.model.Game;
+import com.tdsystemsgroup.blackjack.model.Card;
+import com.tdsystemsgroup.blackjack.model.Game;
+import com.tdsystemsgroup.blackjack.model.Player;
 
-import com.tom.blackjack.service.GameService;
-import com.tom.blackjack.service.BlackJackServiceImpl;
+import com.tdsystemsgroup.blackjack.service.GameService;
+import com.tdsystemsgroup.blackjack.service.BlackJackServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**

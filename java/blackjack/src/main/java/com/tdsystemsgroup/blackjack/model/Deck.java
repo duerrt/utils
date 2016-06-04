@@ -1,4 +1,4 @@
-package com.tom.blackjack.model;
+package com.tdsystemsgroup.blackjack.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Deck {
             }
         }
 
-        shuffle(14);
+        shuffle(15);
     }
 
     public  List<Card> getCards(){

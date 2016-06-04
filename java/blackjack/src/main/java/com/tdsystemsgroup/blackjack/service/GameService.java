@@ -1,6 +1,6 @@
-package com.tom.blackjack.service;
+package com.tdsystemsgroup.blackjack.service;
 
-import com.tom.blackjack.model.Game;
+import com.tdsystemsgroup.blackjack.model.Game;
 
 /**
  * Created by duerrt on 5/30/16.

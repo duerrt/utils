@@ -1,11 +1,11 @@
-/.gradle
+**/.gradle
 /.metadata
 /output
 
 # Exclusions that apply to all projects
 *~
-*/bin
-*/build
+**/bin
+**/build
 */classes
 */target
 */.classpath
@@ -13,4 +13,4 @@
 */context/WEB-INF/lib
 .settings
 /.idea/
-*/.iml
+**/*.iml
