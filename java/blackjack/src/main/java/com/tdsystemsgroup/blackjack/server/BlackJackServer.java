@@ -1,7 +1,7 @@
 package com.tdsystemsgroup.blackjack.server;
 
 import com.tdsystemsgroup.blackjack.common.model.Card;
-
+import com.tdsystemsgroup.blackjack.common.model.Player;
 import java.util.ArrayList;
 
 import static com.tdsystemsgroup.blackjack.server.service.BlackJackServiceImpl.*;
@@ -22,7 +22,7 @@ public class BlackJackServer {
         return getInstance().deal(gameId) ;
     }
 
-    public ArrayList<Card.Player> getPlayers(Integer gameId){
+    public ArrayList<Player> getPlayers(Integer gameId){
         return getInstance().getPlayers(gameId);
     }
     public void finish(Integer gameId){

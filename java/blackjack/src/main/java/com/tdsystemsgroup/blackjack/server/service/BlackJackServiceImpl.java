@@ -1,6 +1,8 @@
 package com.tdsystemsgroup.blackjack.server.service;
 
 import com.tdsystemsgroup.blackjack.common.model.Card;
+import com.tdsystemsgroup.blackjack.common.model.Card;
+import com.tdsystemsgroup.blackjack.common.model.Player;
 import com.tdsystemsgroup.blackjack.server.model.Deck;
 import com.tdsystemsgroup.blackjack.server.model.Game;
 
@@ -41,12 +43,12 @@ public class BlackJackServiceImpl implements GameService {
         Deck deck = new Deck();
         game.setDeck(deck);
 
-        ArrayList<Card.Player> players = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
 
-        players.add(new Card.Player(true, "Dealer"));
+        players.add(new Player(true, "Dealer"));
 
         for (int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Card.Player(false, "Player" + i));
+            players.add(new Player(false, "Player" + i));
         }
 
         game.setPlayers(players);
@@ -80,14 +82,13 @@ public class BlackJackServiceImpl implements GameService {
 
     }
 
-
     public Card deal(Integer gameId) {
         Deck deck = games.get(gameId).getDeck();
         return deck.deal();
     }
 
 
-    public ArrayList<Card.Player> getPlayers(Integer gameId) {
+    public ArrayList<Player> getPlayers(Integer gameId) {
         return games.get(gameId).getPlayers();
     }
 /*
@@ -95,14 +96,14 @@ public class BlackJackServiceImpl implements GameService {
     public void play(Integer gameId) {
 
 
-        ArrayList<Card.Player> players = games.get(gameId).getPlayers();
+        ArrayList<Player> players = games.get(gameId).getPlayers();
 
-        Card.Player dealer = games.get(gameId).getDealer();
+        Player dealer = games.get(gameId).getDealer();
 
         Deck deck = games.get(gameId).getDeck();
 
 
-        for (Card.Player player : players) {
+        for (Player player : players) {
 
             if (player.isDealer()) {
                 continue;
@@ -154,7 +155,7 @@ public class BlackJackServiceImpl implements GameService {
         System.out.println("---Game Over---");
         System.out.println("Dealer:"+dealer.getScore());
 
-        for (Card.Player player : players) {
+        for (Player player : players) {
             if (player.isDealer()) {
                 continue;
             }
@@ -177,7 +178,7 @@ public class BlackJackServiceImpl implements GameService {
 
     @Override
     public void start(Integer gameId) {
-        Card.Player dealer = games.get(gameId).getDealer();
+        Player dealer = games.get(gameId).getDealer();
         Deck deck = games.get(gameId).getDeck();
         try {
             dealer.addCard(deck.deal());
@@ -186,7 +187,7 @@ public class BlackJackServiceImpl implements GameService {
             System.out.println("wont happen");
         }
 
-        for (Card.Player player : games.get(gameId).getPlayers()) {
+        for (Player player : games.get(gameId).getPlayers()) {
             if (player.isDealer()) {
                 continue;
             }

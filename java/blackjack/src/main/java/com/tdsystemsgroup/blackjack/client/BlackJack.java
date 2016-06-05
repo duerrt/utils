@@ -1,6 +1,7 @@
 package com.tdsystemsgroup.blackjack.client;
 
 import com.tdsystemsgroup.blackjack.common.model.Card;
+import com.tdsystemsgroup.blackjack.common.model.Player;
 import com.tdsystemsgroup.blackjack.server.BlackJackServer;
 
 import java.util.ArrayList;
@@ -32,15 +33,15 @@ public class BlackJack {
         BlackJackServer server = new BlackJackServer();
         Integer gameId = server.create(numbPlayers);
 
-        ArrayList<Card.Player> players = server.getPlayers(gameId);
-        Card.Player dealer = null;
+        ArrayList<Player> players = server.getPlayers(gameId);
+        Player dealer = null;
         if (players.get(0).isDealer()){
             dealer = players.get(0);
             players.remove(0);
         }
 
         initialDeal(gameId,server, dealer, players);
-        for (Card.Player player : players) {
+        for (Player player : players) {
 
             if (player.isDealer()) {
                 continue;
@@ -93,7 +94,7 @@ public class BlackJack {
         System.out.println("---Game Over---");
         System.out.println("Dealer:"+dealer.getScore());
 
-        for (Card.Player player : players) {
+        for (Player player : players) {
             if (player.isDealer()) {
                 continue;
             }
@@ -115,7 +116,7 @@ public class BlackJack {
 
     }
 
-    private void initialDeal(Integer gameId, BlackJackServer server, Card.Player dealer, ArrayList<Card.Player> players ) {
+    private void initialDeal(Integer gameId, BlackJackServer server, Player dealer, ArrayList<Player> players ) {
 
         try {
             dealer.addCard(server.deal(gameId));
@@ -124,7 +125,7 @@ public class BlackJack {
             System.out.println("wont happen");
         }
 
-        for (Card.Player player : players) {
+        for (Player player : players) {
             if (player.isDealer()) {
                 continue;
             }
@@ -138,12 +139,12 @@ public class BlackJack {
 
     }
 
-    private void displayScores(Card.Player dealer, Card.Player player) {
+    private void displayScores(Player dealer, Player player) {
         System.out.println("Dealer: " + dealer.getScore() + "[" + dealer.getDealerShowScore() + "] " + player.getName() + ":" + player.getScore());
 
     }
 
-    private void dumpPlayer(Card.Player p) {
+    private void dumpPlayer(Player p) {
         for (Card c : p.getCards()) {
             System.out.println(p.getName() + " - Card: " + c.getLabel() + " " + c.getValue());
         }
