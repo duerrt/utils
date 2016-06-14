@@ -8,27 +8,27 @@ import java.util.List;
  */
 public class Player {
 
-    private List<Card> cards = new ArrayList();
+    private static int basePlayerId = 1000;
 
-    private boolean dealer = false;
+    private Integer playerId;
+
+    private List<Card> cards = new ArrayList();
 
     private String name = null;
 
     private String status = "";
 
-    public Player(boolean isDealer, String name) {
-        this.dealer = isDealer;
+    public Player() {
+    }
+
+    public Player(String name) {
         this.name = name;
+        this.playerId = getNextId();
     }
 
     public String getName()
     {
         return name;
-    }
-
-    public boolean isDealer()
-    {
-        return dealer;
     }
 
     public List<Card> getCards()
@@ -44,21 +44,22 @@ public class Player {
         return score;
     }
 
-    public int getDealerShowScore() {
+    public int getMinScore() {
         int score = 0;
         for (Card c : cards) {
-            score += c.getValue();
+            score += c.getMinValue();
         }
-        return (score - cards.get(0).getValue());
+        return score;
     }
 
     public void addCard(Card c) throws Exception {
-        int score = getScore();
-        if ((score + c.getValue()) > 21) {
+        cards.add(c);
+
+        if (getScore() > 21 && getMinScore() > 21){
             throw new Exception("Busted with " + c.getValue());
         }
-        cards.add(c);
     }
+
     public String getStatus() {
         return status;
     }
@@ -67,6 +68,30 @@ public class Player {
         this.status = status;
     }
 
+    public Integer getPlayerId() {
+        return playerId;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder cardString = new StringBuilder();
+        for (Card c: cards){
+            cardString.append(c);
+            cardString.append(" ");
+        }
+
+        String score = (getScore() == getMinScore()) ? ""+getScore() : ""+getScore()+"/"+getMinScore();
+        return "Player{" +
+                "cards=" + cardString.toString() +
+                ", name='" + name + '\'' +
+                ", score=" + score +
+                '}';
+    }
+
+    private synchronized Integer getNextId() {
+        basePlayerId += 1;
+        return basePlayerId;
+    }
 
 
 }

@@ -1,10 +1,10 @@
 package com.tdsystemsgroup.blackjack.client;
 
-import com.tdsystemsgroup.blackjack.common.model.Card;
-import com.tdsystemsgroup.blackjack.common.model.Player;
+import com.tdsystemsgroup.blackjack.common.model.*;
 import com.tdsystemsgroup.blackjack.server.BlackJackServer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -20,6 +20,9 @@ public class BlackJack {
 
     }
 
+    /**
+     * Play the game
+     */
     private void play(){
 
         Scanner scanner = new Scanner(System.in);
@@ -33,21 +36,17 @@ public class BlackJack {
         BlackJackServer server = new BlackJackServer();
         Integer gameId = server.create(numbPlayers);
 
-        ArrayList<Player> players = server.getPlayers(gameId);
-        Player dealer = null;
-        if (players.get(0).isDealer()){
-            dealer = players.get(0);
-            players.remove(0);
-        }
+        List<PlayerDisplay> players = server.getPlayers(gameId);
+        Dealer dealer = server.getDealer(gameId);
 
-        initialDeal(gameId,server, dealer, players);
-        for (Player player : players) {
+        GameResponse gameResponse = server.gameStatus(gameId);
+        displayGameStatus(gameResponse);
+        for (PlayerDisplay player : players) {
 
-            if (player.isDealer()) {
+            if (player.getStatus() == ServerResponse.WINNER) {
                 continue;
             }
 
-            displayScores(dealer, player);
             // create a scanner so we can read the command-line input
             scanner = new Scanner(System.in);
             //  prompt for the user's name
@@ -57,19 +56,10 @@ public class BlackJack {
             String cmd = scanner.next();
 
             while (cmd.toLowerCase().equals("h")) {
-                try {
-                    player.addCard(server.deal(gameId));
-                    displayScores(dealer, player);
-//                    dumpPlayer(player);
-                } catch (Exception e) {
-                    System.out.println("Sorry you busted");
-                    player.setStatus("Busted");
-                    break;
-                }
-                if (player.getScore() == 21){
-                    System.out.print("WINNER!!");
-                    player.setStatus("Winner");
-                    break;
+                DealResponse dealResponse = server.deal(gameId,player.getPlayerId());
+                displayDealResponse(dealResponse);
+                if (dealResponse.getStatus().equals(ServerResponse.BUSTED) || dealResponse.getStatus().equals(ServerResponse.WINNER)){
+                  break;
                 }
                 System.out.print("Enter H to hit, S to stay: ");
                 // get their input as a String
@@ -79,8 +69,8 @@ public class BlackJack {
         }
         while (dealer.getScore() < 16) {
             try {
-                dealer.addCard(server.deal(gameId));
-                dumpPlayer(dealer);
+                DealResponse dealResponse = server.deal(gameId, dealer.getPlayerId());
+                displayDealResponse(dealResponse);
             } catch (Exception e) {
                 System.out.println("Dealer busted. You WON!!");
                 dealer.setStatus("Busted");
@@ -92,62 +82,36 @@ public class BlackJack {
             dealer.setStatus("Winner");
         }
         System.out.println("---Game Over---");
-        System.out.println("Dealer:"+dealer.getScore());
+        GameResponse gameResponseOver = server.gameStatus(gameId);
+        displayGameStatus(gameResponseOver);
 
-        for (Player player : players) {
-            if (player.isDealer()) {
-                continue;
-            }
-
-            if (! player.getStatus().equals("Buster") && ! player.getStatus().equals("Winner")){
-                if (player.getScore() == dealer.getScore()){
-                    player.setStatus("Push");
-                } else if (player.getScore() < dealer.getScore()){
-                    player.setStatus("Loser");
-                } else {
-                    player.setStatus("Winner");
-                }
-            }
-            System.out.println(player.getName()+":"+player.getScore()+":"+player.getStatus());
-
-        }
 
         server.finish(gameId);
 
     }
 
-    private void initialDeal(Integer gameId, BlackJackServer server, Player dealer, ArrayList<Player> players ) {
-
-        try {
-            dealer.addCard(server.deal(gameId));
-            dealer.addCard(server.deal(gameId));
-        } catch (Exception e) {
-            System.out.println("wont happen");
-        }
-
-        for (Player player : players) {
-            if (player.isDealer()) {
-                continue;
-            }
-
-            try {
-                player.addCard(server.deal(gameId));
-            } catch (Exception e) {
-                System.out.println("wont happen");
-            }
-        }
-
+    private void displayScores(Dealer dealer, PlayerDisplay player) {
+        System.out.println("Dealer: " + dealer + " " + player);
     }
 
-    private void displayScores(Player dealer, Player player) {
-        System.out.println("Dealer: " + dealer.getScore() + "[" + dealer.getDealerShowScore() + "] " + player.getName() + ":" + player.getScore());
-
+    private void displayDealResponse(DealResponse resp) {
+        System.out.println("Card dealt " +resp.getCard());
+        System.out.println(resp.getDisplayMessage());
+        System.out.println(resp.getScore());
+        System.out.println(resp.getStatus());
     }
 
+    private void displayGameStatus(GameResponse resp) {
+        System.out.println(resp.getDealerStatus());
+        for (PlayerDisplay player : resp.getPlayerStatus()) {
+            System.out.println(player.getName());
+            System.out.println(player.getCardDisplay());
+            System.out.println(player.getScore());
+            System.out.println(player.getStatus());
+        }
+    }
     private void dumpPlayer(Player p) {
-        for (Card c : p.getCards()) {
-            System.out.println(p.getName() + " - Card: " + c.getLabel() + " " + c.getValue());
-        }
+            System.out.println(p);
     }
 
 }
