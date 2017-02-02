@@ -36,8 +36,7 @@ public class BlackJackServiceImpl implements GameService {
     @Override
     public Integer create(int numberOfPlayers) {
 
-        Game game = new Game();
-        game.setId(getNextId());
+        Game game = new Game(getNextId());
         Deck deck = new Deck();
         game.setDeck(deck);
 
@@ -62,48 +61,54 @@ public class BlackJackServiceImpl implements GameService {
         }
         safeGames.put(game.getId(), game);
         games = safeGames;
+        initialDeal(game.getId(), game.getDealer(), game.getPlayers());
 
-        initialDeal(game.getId(), dealer, players);
-
+        game.setStatus("Active");
         return game.getId();
     }
 
-    private void initialDeal(Integer gameId, Dealer dealer, ArrayList<Player> players ) {
-
-        try {
-            dealer.addCard(getNextCard(gameId));
-            System.out.println("Deal 1 " + dealer.getCards().get(0));
-        dealer.addCard(getNextCard(gameId));
-            System.out.println("Deal 2 " + dealer.getCards().get(1));
-        } catch (Exception e) {
-            System.out.println("wont happen");
-        }
-
-        for (Player player : players){
-            try {
-                player.addCard(getNextCard(gameId));
-                player.addCard(getNextCard(gameId));
-            } catch (Exception e) {
-                System.out.println("wont happen");
-            }
-        }
-
-
+    @Override
+    public void play(Integer gameId) {
+        Game game = games.get(gameId);
     }
 
-    @Override
+    private void initialDeal(Integer gameId, Dealer dealer, ArrayList<Player> players) {
+            dealer.getHand().addCard(getNextCard(gameId));
+            System.out.println("Deal 1 " + dealer.getCards().get(0));
+            dealer.getHand().addCard(getNextCard(gameId));
+            System.out.println("Deal 2 " + dealer.getCards().get(1));
+
+        for (Player player : players){
+                player.getHand().addCard(getNextCard(gameId));
+                player.getHand().addCard(getNextCard(gameId));
+        }
+    }
+
+    // @Override
     public GameResponse gameStatus(Integer gameId) {
+        Dealer dealer = games.get(gameId).getDealer();
         GameResponse gameResp = new GameResponse();
-        gameResp.setDealerStatus((games.get(gameId).getDealer().toString()));
-        StringBuilder playerStatus = new StringBuilder();
+        DealerDisplay dealerDisplay = new DealerDisplay();
+
+        dealerDisplay.setVisibleScore(dealer.getVisibleScore());
+        dealerDisplay.setVisibleCard(dealer.getVisibleCard());
+        if (games.get(gameId).getStatus().equals("Done") ){
+            dealerDisplay.setCardDisplay(dealer.getHand().toString());
+            dealerDisplay.setScore(""+(dealer.getHand().getScore()));
+            //dealerDisplay.setScore();
+        }
+
+        gameResp.setDealerStatus(dealerDisplay);
+
         List<Player> players = games.get(gameId).getPlayers();
         List<PlayerDisplay> retPlayers = new ArrayList<>();
         for (Player p : players) {
             PlayerDisplay pd = new PlayerDisplay();
             pd.setName(p.getName());
             pd.setPlayerId(p.getPlayerId());
-            String score = (p.getScore() == p.getMinScore()) ? ""+p.getScore() : ""+p.getScore()+"/"+p.getMinScore();
-            pd.setScore(score);
+            //String score = (p.getScore() == p.getMinScore()) ? ""+p.getScore() : ""+p.getScore()+"/"+p.getMinScore();
+            pd.setScore(""+p.getHand().getScore());
+            pd.setAlternateScore(""+p.getHand().getAlternateScore());
 
             StringBuilder cardDisplay = new StringBuilder();
             for (Card c : p.getCards()){
@@ -111,11 +116,19 @@ public class BlackJackServiceImpl implements GameService {
                 cardDisplay.append(" ");
             }
             pd.setCardDisplay(cardDisplay.toString());
-            if (p.getScore() == 21){
-                pd.setStatus(ServerResponse.WINNER);
-            } else {
-                pd.setStatus("");
+            if (games.get(gameId).getStatus().equals("Done") ){
+                if (! p.getHand().getStatus().equals(ServerResponse.BUSTED) && ! p.getHand().getStatus().equals(ServerResponse.BLACKJACK)){
+                  if (p.getHand().getScore() > dealer.getHand().getScore()){
+                      p.getHand().setStatus(ServerResponse.WINNER);
+                  } else if ( p.getHand().getScore() < dealer.getHand().getScore() ){
+                      p.getHand().setStatus(ServerResponse.LOST);
+                  }
+                  else {
+                      p.getHand().setStatus(ServerResponse.PUSH);
+                  }
+                }
             }
+            pd.setStatus(p.getHand().getStatus());
 
             retPlayers.add(pd);
         }
@@ -125,51 +138,31 @@ public class BlackJackServiceImpl implements GameService {
     }
 
 
-    @Override
+  //  @Override
     public DealResponse deal(Integer gameId, Integer playerId) {
         DealResponse dealResp = new DealResponse();
         Game game = games.get(gameId);
-        Player p = null;
+        Player p ;
         Card dealt = null;
-        if (game.getDealer().getPlayerId().equals(playerId)) {
-            p = game.getDealer();
-        } else {
-            ArrayList<Player> players = game.getPlayers();
-            for (Player player : players) {
-                if (player.getPlayerId().equals(playerId)){
-                    p = player;
-                } else {
-                    continue;
-                }
-            }
-        }
-        try {
-            dealt = getNextCard(gameId);
-            p.addCard(dealt);
-        } catch (Exception e) {
-            dealResp.setCard(dealt.toString());
-            dealResp.setStatus(DealResponse.BUSTED);
-            dealResp.setDisplayMessage(e.getMessage());
-            return dealResp;
-        }
+        p = getActivePlayer(game, playerId);
 
-        if (p.getScore() == 21){
-            dealResp.setCard(dealt.toString());
-            dealResp.setScore(p.getScore());
-            dealResp.setStatus(DealResponse.WINNER);
-            dealResp.setDisplayMessage("Winner!");
-
-            return dealResp;
-        }
+        dealt = getNextCard(gameId);
+        p.getHand().addCard(dealt);
         dealResp.setCard(dealt.toString());
-        dealResp.setScore(p.getScore());
-        dealResp.setStatus(DealResponse.ACTIVE);
-        dealResp.setDisplayMessage("");
+        dealResp.setStatus(p.getHand().getStatus());
+        dealResp.setScore(p.getHand().getScore());
         return dealResp;
     }
 
     @Override
-    public void finish(Integer gameId) {
+    public GameResponse finish(Integer gameId) {
+
+        games.get(gameId).setStatus("Done");
+        Dealer dealer = games.get(gameId).getDealer();
+        List<Player> players = games.get(gameId).getPlayers();
+        dealDealer(dealer, gameId);
+
+        GameResponse gr = gameStatus(gameId);
         Map<Integer, Game> safeGames = new HashMap<>();
         for (Map.Entry<Integer, Game> entry : games.entrySet())
         {
@@ -179,7 +172,18 @@ public class BlackJackServiceImpl implements GameService {
             safeGames.put(entry.getKey(),entry.getValue());
         }
         games = safeGames;
+        return gr;
+    }
 
+    private void dealDealer(Dealer dealer, Integer gameId) {
+
+        while (dealer.getHand().getScore() < 16) {
+            deal(gameId, dealer.getPlayerId());
+        }
+
+        if (dealer.getHand().getScore() == 21){
+            dealer.getHand().setStatus(ServerResponse.WINNER);
+        }
     }
 
     private Card getNextCard(Integer gameId) {
@@ -199,19 +203,33 @@ public class BlackJackServiceImpl implements GameService {
             PlayerDisplay pd = new PlayerDisplay();
             pd.setName(p.getName());
             pd.setPlayerId(p.getPlayerId());
-            String score = (p.getScore() == p.getMinScore()) ? ""+p.getScore() : ""+p.getScore()+"/"+p.getMinScore();
+            //String score = (p.getScore() == p.getMinScore()) ? ""+p.getScore() : ""+p.getScore()+"/"+p.getMinScore();
+            String score = ""+(p.getHand().getScore());
             pd.setScore(score);
             playerDisplay.add(pd);
         }
         return playerDisplay;
     }
 
+    private Player getActivePlayer(Game game, Integer playerId){
+        if (game.getDealer().getPlayerId().equals(playerId)) {
+            return  getDealer(game.getId());
+        }
+        ArrayList<Player> players = game.getPlayers();
+        Player p = null;
+        for (Player player : players) {
+            if (player.getPlayerId().equals(playerId)){
+                p = player;
+            }
+        }
+        return p;
+    }
     /**
      * get the dealer
      * @param gameId
      * @return Dealer
      */
-    public Dealer getDealer(Integer gameId) {
+    private Dealer getDealer(Integer gameId) {
         return games.get(gameId).getDealer();
     }
 /*
@@ -324,6 +342,7 @@ public class BlackJackServiceImpl implements GameService {
 
     }
 */
+
     private synchronized Integer getNextId() {
         baseGameId += 1;
         return baseGameId;

@@ -14,15 +14,12 @@ public class Deck {
 
     List<Card> cards = new ArrayList();
 
-    /**
-     * Deck constuctor
-     * create the cards and shuffle
-     */
     public Deck (){
         for (Card.Suits suit : Card.Suits.values()) {
             for (int i=1; i<14; i++){
                 Card c = null;
-                c = new Card(suit.toString(), Card.cardMinValues.get(Card.cardLabels.get(i)), Card.cardMaxValues.get(Card.cardLabels.get(i)), Card.cardLabels.get(i) );
+                c = new Card(suit.toString(),
+                        Card.cardValues.get(Card.cardLabels.get(i)), Card.cardLabels.get(i) );
                 cards.add(c);
             }
         }
@@ -35,17 +32,10 @@ public class Deck {
         }
     }
 
-    /**
-     * deal a card
-     * @return the card dealt
-     */
     public Card deal(){
         return cards.remove(0);
     }
 
-    /**
-     * shuffle the cards
-     */
     private void shuffle(){
         for ( int i=0; i<cards.size() ; i++) {
             Card tmp = cards.get(i);
@@ -53,6 +43,5 @@ public class Deck {
             cards.set(i, cards.get(j));
             cards.set(j, tmp);
        }
-
     }
 }

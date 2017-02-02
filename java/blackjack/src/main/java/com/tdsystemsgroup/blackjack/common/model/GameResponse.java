@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class GameResponse extends ServerResponse{
 
-    private String dealerStatus;
-    private String dealerScore;
-    private List<PlayerDisplay> playerStatus = new ArrayList<>();
-
     public GameResponse() {
         super();
     }
+
+    private DealerDisplay dealerStatus;
+
+    private List<PlayerDisplay> playerStatus = new ArrayList<>();
 
     public List<PlayerDisplay> getPlayerStatus() {
         return playerStatus;
@@ -24,21 +24,11 @@ public class GameResponse extends ServerResponse{
         this.playerStatus = playerStatus;
     }
 
-    public String getDealerStatus() {
+    public DealerDisplay getDealerStatus() {
         return dealerStatus;
     }
 
-    public void setDealerStatus(String dealerStatus) {
+    public void setDealerStatus(DealerDisplay dealerStatus) {
         this.dealerStatus = dealerStatus;
     }
-
-    public String getDealerScore() {
-        return dealerScore;
-    }
-
-    public void setDealerScore(String dealerScore) {
-        this.dealerScore = dealerScore;
-    }
-
-
 }

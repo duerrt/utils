@@ -1,0 +1,27 @@
+.navbar{
+ background-color: white;
+ padding: 0px;
+ margin: 0px;
+}
+
+.header {
+ margin: 0px;
+ padding: 0px;
+}
+
+.navbar-brand {
+ color: green;
+}
+
+.jumbotron {
+ background-color: white;
+ padding: 0px;
+}
+
+.container {
+ background-color: white;
+}
+
+.btn-lg {
+ background-color: ;
+}

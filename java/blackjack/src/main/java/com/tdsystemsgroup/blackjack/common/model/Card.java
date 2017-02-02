@@ -9,25 +9,21 @@ public class Card {
 
     String suit = null;
 
-    int minValue;
-
-    int maxValue;
+    int value;
 
     String label;
 
-    public static Map<Integer, String> cardLabels  = initCardLabels();
+    public static Map<Integer, String> cardLabels  = initializeCardLabels();
 
-    public static Map<String, Integer> cardMinValues  = initCardMinValues();
-    public static Map<String, Integer> cardMaxValues  = initCardMaxValues();
+    public static Map<String, Integer> cardValues  = initializeCardValues();
 
     public enum Suits {
      clubs, diamonds, hearts, spades
     }
 
-    public Card(String suit, int min, int max, String  label){
+    public Card(String suit, int value, String  label){
       this.suit = suit;
-      this.minValue= min;
-      this.maxValue= max;
+      this.value = value;
       this.label = label;
     }
 
@@ -38,7 +34,7 @@ public class Card {
         return (this.label + " of " + this.suit);
     }
 
-    protected static Map<Integer, String> initCardLabels() {
+    protected static Map<Integer, String> initializeCardLabels() {
         final Map<Integer, String> cardMap = new HashMap<>();
         cardMap.put(1, "Ace");
         cardMap.put(2, "two");
@@ -57,7 +53,7 @@ public class Card {
         return Collections.unmodifiableMap(cardMap);
     }
 
-    protected static Map<String, Integer> initCardMaxValues() {
+    protected static Map<String, Integer> initializeCardValues() {
         final Map<String, Integer> cardMap = new HashMap<>();
         cardMap.put("Ace" ,11);
         cardMap.put("two", 2);
@@ -76,37 +72,22 @@ public class Card {
         return Collections.unmodifiableMap(cardMap);
     }
 
-    protected static Map<String, Integer> initCardMinValues() {
-        final Map<String, Integer> cardMap = new HashMap<>();
-        cardMap.put("Ace" ,1);
-        cardMap.put("two", 2);
-        cardMap.put("three", 3);
-        cardMap.put("four", 4);
-        cardMap.put("five", 5);
-        cardMap.put("six", 6);
-        cardMap.put("seven", 7);
-        cardMap.put("eight", 8);
-        cardMap.put("nine", 9);
-        cardMap.put("ten", 10);
-        cardMap.put("Jack", 10);
-        cardMap.put("Queen", 10);
-        cardMap.put("King", 10);
-
-        return Collections.unmodifiableMap(cardMap);
-    }
     public int getValue()
     {
-        return maxValue;
-    }
-    public int getMinValue()
-    {
-        return minValue;
+        return value;
     }
 
     public String getLabel()
 
     {
         return label;
+    }
+
+    public boolean isAce(){
+        if (this.getLabel().equals("Ace")){
+            return true;
+        }
+        return false;
     }
 
 }

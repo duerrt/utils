@@ -9,12 +9,15 @@ public class Dealer extends Player {
         super("Dealer");
     }
 
-    public int getDealerVisibleScore() {
+    public int getVisibleScore() {
         int score = 0;
         for (Card c : getCards() ) {
             score += c.getValue();
         }
         return (score - getCards().get(0).getValue());
+    }
+    public String getVisibleCard() {
+        return  getCards().get(1).toString();
     }
 
     @Override
@@ -26,7 +29,7 @@ public class Dealer extends Player {
         }
         return "Dealer{" +
                 "cards=" + cardString.toString() +
-                " score=" + getDealerVisibleScore()+
+                " score=" + getVisibleScore()+
                 '}';
     }
 

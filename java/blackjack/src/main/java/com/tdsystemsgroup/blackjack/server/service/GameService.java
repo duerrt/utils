@@ -11,12 +11,10 @@ public interface GameService {
 
     public Integer create(int numberOfPlayers);
 
- //   public void start(Integer gameId);
+    public void play(Integer gameId);
+    //public DealResponse deal(Integer gameId, Integer playerId);
 
-  //  public void play(Integer gameId);
-    public DealResponse deal(Integer gameId, Integer playerId);
-
-    public GameResponse gameStatus(Integer gameId);
-    public void finish(Integer gameId);
+    //public GameResponse gameStatus(Integer gameId);
+    public GameResponse finish(Integer gameId);
 
 }

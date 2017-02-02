@@ -16,6 +16,8 @@ public class PlayerDisplay {
 
     private String score;
 
+    private String alternateScore;
+
     private String cardDisplay;
 
     public PlayerDisplay() {
@@ -60,5 +62,25 @@ public class PlayerDisplay {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getAlternateScore() {
+        return alternateScore;
+    }
+
+    public void setAlternateScore(String alternateScore) {
+        this.alternateScore = alternateScore;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerDisplay{" +
+                "playerId=" + playerId +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", score='" + score + '\'' +
+                ", alternateScore='" + alternateScore + '\'' +
+                ", cardDisplay='" + cardDisplay + '\'' +
+                '}';
     }
 }

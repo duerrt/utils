@@ -19,12 +19,13 @@ public class Game {
 
     private Dealer dealer = null;
 
-    public Game() {
+    private String status = null;
 
+    public Game(Integer id) {
+        this.id = id;
     }
 
     public ArrayList<Player> getPlayers() {
-
         return players;
     }
 
@@ -44,10 +45,6 @@ public class Game {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Dealer getDealer() {
         return dealer;
     }
@@ -55,5 +52,14 @@ public class Game {
     public void setDealer(Dealer dealer) {
         this.dealer = dealer;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 
 }

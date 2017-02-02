@@ -7,9 +7,10 @@ public class ServerResponse {
 
     public static final String BUSTED = "Busted";
     public static final String WINNER = "Winner";
+    public static final String BLACKJACK = "BlackJack";
     public static final String PUSH = "Push";
     public static final String ACTIVE = "Active";
-
+    public static final String LOST = "Lost";
     private String displayMessage;
 
     private String status;

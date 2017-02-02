@@ -12,11 +12,13 @@ public class Player {
 
     private Integer playerId;
 
-    private List<Card> cards = new ArrayList();
+    private Hand hand = new Hand();
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
 
     private String name = null;
-
-    private String status = "";
 
     public Player() {
     }
@@ -33,39 +35,11 @@ public class Player {
 
     public List<Card> getCards()
     {
-        return cards;
+        return hand.getCards();
     }
 
-    public int getScore() {
-        int score = 0;
-        for (Card c : cards) {
-            score += c.getValue();
-        }
-        return score;
-    }
-
-    public int getMinScore() {
-        int score = 0;
-        for (Card c : cards) {
-            score += c.getMinValue();
-        }
-        return score;
-    }
-
-    public void addCard(Card c) throws Exception {
-        cards.add(c);
-
-        if (getScore() > 21 && getMinScore() > 21){
-            throw new Exception("Busted with " + c.getValue());
-        }
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public Hand getHand() {
+        return hand;
     }
 
     public Integer getPlayerId() {
@@ -75,12 +49,13 @@ public class Player {
     @Override
     public String toString() {
         StringBuilder cardString = new StringBuilder();
-        for (Card c: cards){
-            cardString.append(c);
+        this.getCards().forEach(card ->{
+            cardString.append(card);
             cardString.append(" ");
-        }
+        });
 
-        String score = (getScore() == getMinScore()) ? ""+getScore() : ""+getScore()+"/"+getMinScore();
+       String score = (hand.getStatus());
+//        String score = (hand.getScore() == hand.getMinScore()) ? ""+hand.getScore() : ""+hand.getScore()+"/"+hand.getMinScore();
         return "Player{" +
                 "cards=" + cardString.toString() +
                 ", name='" + name + '\'' +
@@ -92,6 +67,4 @@ public class Player {
         basePlayerId += 1;
         return basePlayerId;
     }
-
-
 }

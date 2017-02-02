@@ -1,11 +1,10 @@
 package com.tdsystemsgroup.blackjack.server;
 
-import com.tdsystemsgroup.blackjack.common.model.*;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.tdsystemsgroup.blackjack.server.service.BlackJackServiceImpl.*;
 
 /**
  * a server class to be used until we can implement a real http server
@@ -13,30 +12,12 @@ import static com.tdsystemsgroup.blackjack.server.service.BlackJackServiceImpl.*
  *
  * Created by duerrt on 6/4/16.
  */
-public class BlackJackServer {
-
-    public Integer create(Integer numbPlayers){
-        return getInstance().create(numbPlayers) ;
+@ApplicationPath("game")
+public class BlackJackServer extends Application {
+ @Override
+    public Set<Class<?>> getClasses() {
+       final Set<Class<?>> classes = new HashSet<Class<?>>();
+      classes.add(BlackJackResource.class);
+     return classes;
     }
-
-    public DealResponse deal(Integer gameId, Integer playerId){
-        return getInstance().deal(gameId, playerId) ;
-    }
-
-    public GameResponse gameStatus(Integer gameId){
-        return getInstance().gameStatus(gameId) ;
-    }
-
-    public List<PlayerDisplay> getPlayers(Integer gameId){
-        return getInstance().getPlayers(gameId);
-    }
-
-    public void finish(Integer gameId){
-        getInstance().finish(gameId) ;
-    }
-
-    public Dealer getDealer(Integer gameId){
-        return getInstance().getDealer(gameId);
-    }
-
 }
